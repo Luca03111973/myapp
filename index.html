@@ -1,0 +1,1609 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <title>Pen database </title>
+    <link rel="stylesheet" href="./style.css">
+
+  </head>
+    
+  <body>
+  <html lang="it">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CDSS - Clinical Decision Support System Avanzato - Edizione 2026</title>
+  <style>
+    :root {
+      --bg-main: #0f172a;
+      --bg-card: #1e293b;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #38bdf8;
+      --danger: #f43f5e;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --purple: #a855f7;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border-radius: 8px;
+      padding: 25px;
+      margin-bottom: 25px;
+      border: 1px solid #334155;
+    }
+
+    h2 {
+      color: var(--accent);
+      margin-top: 0;
+      border-bottom: 2px solid #334155;
+      padding-bottom: 8px;
+      font-size: 1.5rem;
+    }
+
+    h3 {
+      color: var(--purple);
+      margin-top: 15px;
+      font-size: 1.2rem;
+    }
+
+    h4 {
+      color: #fff;
+      margin-top: 10px;
+      margin-bottom: 5px;
+    }
+
+    .grid-1 {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 15px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 15px;
+    }
+
+    label {
+      margin-bottom: 6px;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    input,
+    select,
+    textarea {
+      background: #0f172a;
+      border: 1px solid #475569;
+      color: #fff;
+      padding: 10px 12px;
+      border-radius: 4px;
+      font-size: 0.95rem;
+    }
+
+    textarea {
+      resize: vertical;
+      font-family: inherit;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--accent);
+      outline: none;
+    }
+
+    .mappa-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 25px;
+      background: #0f172a;
+      padding: 20px;
+      border-radius: 6px;
+      border: 1px solid #334155;
+    }
+
+    .manichino-corpo {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      background: #131d31;
+      padding: 20px;
+      border-radius: 6px;
+      border: 1px dashed #475569;
+      align-items: center;
+    }
+
+    .linea-manichino {
+      display: flex;
+      gap: 10px;
+      width: 100%;
+      justify-content: center;
+    }
+
+    .body-trigger {
+      background: #334155;
+      padding: 10px 14px;
+      border-radius: 4px;
+      text-align: center;
+      cursor: pointer;
+      border: 1px solid transparent;
+      font-weight: 500;
+      font-size: 0.85rem;
+      transition: all 0.2s;
+      flex: 1;
+      max-width: 180px;
+    }
+
+    .body-trigger:hover {
+      background: #475569;
+    }
+
+    .body-trigger.selected {
+      background: #2563eb;
+      border-color: var(--accent);
+      color: white;
+    }
+
+    .body-trigger.active {
+      background: #1e3a8a;
+      border-color: var(--success);
+      color: white;
+    }
+
+    .farmaco-finestre-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .finestra-farmaco-box {
+      background: #0f172a;
+      padding: 15px;
+      border-radius: 6px;
+      border: 1px solid #334155;
+    }
+
+    .finestra-farmaco-box label {
+      color: var(--accent);
+      font-weight: bold;
+      display: block;
+      margin-bottom: 8px;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+    }
+
+    .finestra-farmaco-box select {
+      width: 100%;
+    }
+
+    .badge-clinico {
+      background: #2563eb;
+      border: 1px solid #3b82f6;
+      color: #fff;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .badge-clinico span {
+      color: #ef4444;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .box-badges {
+      min-height: 50px;
+      padding: 10px;
+      background: #0f172a;
+      border-radius: 6px;
+      border: 1px dashed #475569;
+      margin-top: 5px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .alert-panel {
+      background: #131d31;
+      border: 1px solid #334155;
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 15px;
+    }
+
+    .questionario-row {
+      display: grid;
+      grid-template-columns: 3fr 1fr;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid #334155;
+    }
+
+    .score-box {
+      font-weight: bold;
+      color: var(--warning);
+      margin-top: 10px;
+      font-size: 1.1rem;
+      background: #0f172a;
+      padding: 10px;
+      border-radius: 4px;
+      border: 1px solid #334155;
+    }
+
+    .btn {
+      background: var(--accent);
+      color: #0f172a;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .btn:hover {
+      opacity: 0.9;
+    }
+
+    @media print {
+      body {
+        background: white;
+        color: black;
+        padding: 0;
+      }
+
+      .card {
+        border: 1px solid #000;
+        background: white;
+        color: black;
+        page-break-inside: avoid;
+        margin-bottom: 10px;
+        padding: 15px;
+      }
+
+      input,
+      select,
+      textarea {
+        color: black;
+        background: white;
+        border: 1px solid #000 !important;
+      }
+
+      .btn,
+      .body-trigger,
+      #zone-configurator-ui,
+      .finestra-farmaco-box,
+      select {
+        display: none !important;
+      }
+
+      .box-badges {
+        border: 1px solid #000;
+      }
+
+      h2,
+      h3 {
+        color: black;
+        border-bottom: 1px solid #000;
+      }
+
+      .score-box {
+        color: black;
+        border: 1px solid #000;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="card">
+      <h2>1. Anagrafica, Antropometria e Stili di Vita</h2>
+      <div class="grid-4">
+        <div class="form-group"><label>Nome</label><input type="text" id="nomePaziente"></div>
+        <div class="form-group"><label>Cognome</label><input type="text" id="cognomePaziente"></div>
+        <div class="form-group"><label>Data di Nascita</label><input type="date" id="dataNascita" onchange="eseguiCalcoliAnagrafici()"></div>
+        <div class="form-group"><label>Luogo di Nascita</label><input type="text" id="luogoNascita"></div>
+      </div>
+      <div class="grid-4">
+        <div class="form-group"><label>Codice Fiscale</label><input type="text" id="codiceFiscale"></div>
+        <div class="form-group"><label>Telefono</label><input type="text" id="telefonoPaziente"></div>
+        <div class="form-group"><label>Email</label><input type="email" id="emailPaziente"></div>
+        <div class="form-group"><label>Attività Lavorativa (Professione)</label><input type="text" id="lavoroPaziente"></div>
+      </div>
+      <div class="grid-4">
+        <div class="form-group">
+          <label>Sesso Anatomico</label>
+          <select id="sesso" onchange="eseguiCalcoliAnagrafici()">
+            <option value="M">Maschio</option>
+            <option value="F">Femmina</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Peso (kg)</label><input type="number" id="peso" value="70" oninput="eseguiCalcoliAnagrafici()"></div>
+        <div class="form-group"><label>Altezza (cm)</label><input type="number" id="altezza" value="170" oninput="eseguiCalcoliAnagrafici()"></div>
+        <div class="form-group"><label>Circonferenza Vita (cm)</label><input type="number" id="girovita" value="85" oninput="eseguiCalcoliAnagrafici()"></div>
+      </div>
+      <div class="grid-3">
+        <div class="form-group"><label>Età Calcolata</label><input type="text" id="etaPaziente" readonly style="background: #334155;"></div>
+        <div class="form-group"><label>Indice BMI (Stato Ponderale)</label><input type="text" id="bmiOutput" readonly style="background: #334155; font-weight: bold;"></div>
+        <div class="form-group"><label>Valutazione Girovita (Rischio)</label><input type="text" id="girovitaOutput" readonly style="background: #334155; font-weight: bold;"></div>
+      </div>
+      <div class="grid-3">
+        <div class="form-group">
+          <label>Abitudine al Fumo</label>
+          <select id="abitudineFumo">
+            <option value="Non fumatore">Non fumatore</option>
+            <option value="Ex fumatore">Ex fumatore</option>
+            <option value="Fumatore attivo">Fumatore attivo</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Se Ex/Attivo: da quanti anni? (Fumo)</label><input type="number" id="fumoAnni" min="0" placeholder="Anni"></div>
+        <div class="form-group">
+          <label>Consumo di Alcolici</label>
+          <select id="abitudineAlcol">
+            <option value="Astemio">Astemio</option>
+            <option value="Moderato">Moderato (&lt;2 UA/die)</option>
+            <option value="Elevato a rischio">Elevato a rischio (&gt;2 UA/die)</option>
+          </select>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="form-group">
+          <label>Attività Sportiva / Fisica</label>
+          <select id="attivitaSportiva">
+            <option value="Sedentario">Sedentario (Nessuna attività)</option>
+            <option value="Lieve">Lieve (&lt;1 volta/settimana)</option>
+            <option value="Moderata">Moderata (1-3 volte/settimana)</option>
+            <option value="Intensa">Intensa (Attività agonistica o giornaliera)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Pattern Alimentare</label>
+          <select id="regimeAlimentare">
+            <option value="Onnivoro bilanciato">Onnivoro bilanciato</option>
+            <option value="Dieta Occidentale">Dieta Occidentale (ricca di grassi/zuccheri)</option>
+            <option value="Iposodico stretto">Iposodico stretto</option>
+            <option value="Vegetariano / Vegano">Vegetariano / Vegano</option>
+            <option value="Controllato per Diabete">Controllato per Diabete / Dislipidemia</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Spazio Scrittura Manuale / Note Libere Anagrafica e Stili di Vita</label>
+        <textarea id="noteAnagraficaManuale" rows="2" placeholder="Spazio per annotazioni manuali..."></textarea>
+      </div>
+    </div>
+    <div class="card">
+      <h2>2. Parametri di Laboratorio ed Ematochimici</h2>
+      <div class="grid-4">
+        <div class="form-group"><label>Creatinina Sierica (mg/dL)</label><input type="number" id="labCreatinina" step="0.01" value="1.00" oninput="calcolaFiltrazioneGlomerulare()"></div>
+        <div class="form-group"><label>Clearance Stimata eGFR (Cockcroft-Gault)</label><input type="text" id="egfrOutput" readonly style="background: #334155; font-weight: bold; color: var(--success);"></div>
+        <div class="form-group"><label>Glicemia a Digiuno (mg/dL)</label><input type="number" id="labGlicemia"></div>
+        <div class="form-group"><label>Emoglobina Glicata HbA1c (%)</label><input type="number" id="labHba1c" step="0.1"></div>
+      </div>
+      <div class="grid-4">
+        <div class="form-group"><label>AST / SGOT (U/L)</label><input type="number" id="labAst"></div>
+        <div class="form-group"><label>ALT / SGPT (U/L)</label><input type="number" id="labAlt"></div>
+        <div class="form-group"><label>Gamma GT (U/L)</label><input type="number" id="labGgt"></div>
+        <div class="form-group"><label>Bilirubina Totale (mg/dL)</label><input type="number" id="labBilirubina" step="0.1"></div>
+      </div>
+      <div class="form-group">
+        <label>Spazio Scrittura Manuale / Esami di Laboratorio Integrativi</label>
+        <textarea id="noteLaboratorioManuale" rows="2" placeholder="Digitare o annotare altri esami..."></textarea>
+      </div>
+    </div>
+    <div class="card">
+      <h2>3. Anamnesi Patologica e Comorbilità</h2>
+      <h3>3.A Anamnesi Familiare</h3>
+      <div class="grid-1">
+        <div class="form-group">
+          <label>Seleziona Patologie dell'Anamnesi Familiare</label>
+          <select id="sel-fam-cardio" onchange="aggiungiBadgeClinico('sel-fam-cardio', 'box-fam-cardio')">
+            <option value="">-- Seleziona Familiarità --</option>
+            <option value="Cardiopatia Ischemica (Familiarità)">Cardiopatia Ischemica</option>
+            <option value="Scompenso Cardiaco (Familiarità)">Scompenso Cardiaco</option>
+            <option value="Ipertensione Arteriosa (Familiarità)">Ipertensione Arteriosa</option>
+            <option value="K Polmone (Familiarità)">K Polmone</option>
+            <option value="K Mammella (Familiarità)">K Mammella</option>
+            <option value="K Intestino (Familiarità)">K Intestino</option>
+            <option value="Demenza (Familiarità)">Demenza</option>
+            <option value="Malattie Neurodegenerative (Familiarità)">Malattie Neurodegenerative</option>
+            <option value="CAD/Infarto (Familiarità)">CAD/Infarto</option>
+            <option value="Ictus (Familiarità)">Ictus</option>
+            <option value="Diabete (Familiarità)">Diabete</option>
+            <option value="Dislipidemia (Familiarità)">Dislipidemia</option>
+          </select>
+          <div id="box-fam-cardio" class="box-badges"></div>
+        </div>
+      </div>
+      <div class="form-group" style="margin-top: 10px; margin-bottom: 25px;">
+        <label style="color: var(--text-muted);">Note e Approfondimenti Liberi - Anamnesi Familiare</label>
+        <textarea id="noteAnamnesiFamiliareLibere" rows="3" placeholder="Annotare dettagli clinici sull'anamnesi familiare ed ereditarietà..."></textarea>
+      </div>
+      <h3>3.B Anamnesi Patologica Remota e Prossima Personale</h3>
+      <div class="grid-3">
+        <div class="form-group">
+          <label>Comorbilità Cardiovascolari Personali</label>
+          <select id="sel-pers-cardio" onchange="aggiungiBadgeClinico('sel-pers-cardio', 'box-pers-cardio')">
+            <option value="">-- Seleziona --</option>
+            <option value="Ipertensione Arteriosa">Ipertensione Arteriosa</option>
+            <option value="Cardiopatia Ischemica">Cardiopatia Ischemica</option>
+            <option value="Scompenso Cardiaco">Scompenso Cardiaco</option>
+          </select>
+          <div id="box-pers-cardio" class="box-badges"></div>
+        </div>
+        <div class="form-group">
+          <label>Comorbilità Gastrointestinali, Epatorenali e Urologiche</label>
+          <select id="sel-pers-gastro" onchange="aggiungiBadgeClinico('sel-pers-gastro', 'box-pers-gastro')">
+            <option value="">-- Seleziona --</option>
+            <option value="Ulcera Peptica Attiva / Pregressa">Ulcera Peptica Attiva / Pregressa</option>
+            <option value="Gastrite / MRGE">Gastrite / MRGE</option>
+            <option value="Insufficienza Renale Cronica (IRC)">Insufficienza Renale Cronica (IRC)</option>
+            <option value="Iperplasia Prostatica Benigna">Iperplasia Prostatica Benigna (IPB)</option>
+            <option value="Nevralgia del Trigemino">Nevralgia del Trigemino</option>
+          </select>
+          <div id="box-pers-gastro" class="box-badges"></div>
+        </div>
+        <div class="form-group">
+          <label>Patologie Osteoarticolari, Respiratorie e Centrali</label>
+          <select id="sel-pers-metab" onchange="aggiungiBadgeClinico('sel-pers-metab', 'box-pers-metab')">
+            <option value="">-- Seleziona --</option>
+            <option value="OSTEOPOROSI">OSTEOPOROSI</option>
+            <option value="MALATTIE REUMATICHE">MALATTIE REUMATICHE (es. AR, Spondiloartriti)</option>
+            <option value="Diabete Mellito Tipo 2">Diabete Mellito Tipo 2</option>
+            <option value="Depressione Maggiore / Ansia Cronica">Depressione Maggiore / Ansia Cronica</option>
+            <option value="Asma Bronchiale">Asma Bronchiale</option>
+            <option value="BPCO">BPCO (Broncopneumopatia Cronica Ostruttiva)</option>
+            <option value="Fibrosi Polmonare">Fibrosi Polmonare</option>
+          </select>
+          <div id="box-pers-metab" class="box-badges"></div>
+        </div>
+      </div>
+      <div class="form-group" style="margin-top: 10px;">
+        <label style="color: var(--text-muted);">Note e Approfondimenti Liberi - Anamnesi Patologica Personale</label>
+        <textarea id="noteAnamnesiPatologicaLibere" rows="3" placeholder="Annotare interventi chirurgici, traumi, comorbidità non incluse..."></textarea>
+      </div>
+    </div>
+    <div class="card">
+      <h2>6. Mappa Topografica del Dolore e Profilo Cronologico</h2>
+      <div class="grid-2" style="margin-bottom: 20px; background: #0f172a; padding: 15px; border-radius: 6px; border: 1px solid #334155;">
+        <div class="form-group">
+          <label style="color: var(--accent); font-weight: bold;">Durata Complessiva del Quadro Algico</label>
+          <select id="durata-dolore" onchange="valutaMotoreCDSS()">
+            <option value="acuto">Dolore ACUTO (Durata inferiore a 3 mesi)</option>
+            <option value="cronico">Dolore CRONICO (Durata superiore o uguale a 3 mesi)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label style="color: var(--purple); font-weight: bold;">Note Cliniche di Insorgenza</label>
+          <input type="text" id="insorgenza-note" placeholder="Es: Insorgenza improvvisa post-traumatica...">
+        </div>
+      </div>
+      <div class="mappa-container">
+        <div class="manichino-corpo">
+          <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; margin-bottom: 5px;">Mappa Distretti Corporei</div>
+          <div class="linea-manichino">
+            <div class="body-trigger" id="t-testa" onclick="attivaDistrettoAlgico(this, 'Testa / Cranio')">Testa / Cranio</div>
+            <div class="body-trigger" id="t-trigemino" onclick="attivaDistrettoAlgico(this, 'Trigemino')">Trigemino (Faccia)</div>
+          </div>
+          <div class="linea-manichino">
+            <div class="body-trigger" id="t-cervicale" onclick="attivaDistrettoAlgico(this, 'Rachide Cervicale')">Rachide Cervicale</div>
+          </div>
+          <div class="linea-manichino">
+            <div class="body-trigger" id="t-spasx" onclick="attivaDistrettoAlgico(this, 'Spalla/Arto Sup Sx')">Spalla/Arto Sup Sx</div>
+            <div class="body-trigger" id="t-torace" onclick="attivaDistrettoAlgico(this, 'Torace / Rachide Dorsale')">Torace / Dorsale</div>
+            <div class="body-trigger" id="t-spadx" onclick="attivaDistrettoAlgico(this, 'Spalla/Arto Sup Dx')">Spalla/Arto Sup Dx</div>
+          </div>
+          <div class="linea-manichino">
+            <div class="body-trigger" id="t-lombare" onclick="attivaDistrettoAlgico(this, 'Rachide Lombare')">Rachide Lombare</div>
+            <div class="body-trigger" id="t-addome" onclick="attivaDistrettoAlgico(this, 'Addome / Pelvi')">Addome / Pelvi</div>
+          </div>
+          <div class="linea-manichino">
+            <div class="body-trigger" id="t-ancasx" onclick="attivaDistrettoAlgico(this, 'Anca / Coscia Sx')">Anca / Coscia Sx</div>
+            <div class="body-trigger" id="t-ancadx" onclick="attivaDistrettoAlgico(this, 'Anca / Coscia Dx')">Anca / Coscia Dx</div>
+          </div>
+          <div class="linea-manichino">
+            <div class="body-trigger" id="t-gino_sx" onclick="attivaDistrettoAlgico(this, 'Ginocchio Sx')">Ginocchio Sx</div>
+            <div class="body-trigger" id="t-gino_dx" onclick="attivaDistrettoAlgico(this, 'Ginocchio Dx')">Ginocchio Dx</div>
+          </div>
+        </div>
+        <div id="zone-configurator-ui" style="display:none; flex-direction: column; gap: 12px; background: #131d31; padding: 15px; border-radius: 6px; border: 1px solid var(--accent);">
+          <h4 id="selected-zone-title" style="color: var(--accent); margin:0;">Sede Selezionata: </h4>
+          <div class="form-group">
+            <label>Vettore Meccanico (Carico, Movimento)</label>
+            <select id="input-zone-meccanico">
+              <option value="0">0 - Assente</option>
+              <option value="2">1-2 (Lieve/Moderato): dolore dopo sforzi o camminate lunghe</option>
+              <option value="4">3-4 (Severo): limita movimenti quotidiani ma cessa al riposo</option>
+              <option value="5">5 (Estremo): blocco funzionale immediato al minimo movimento</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Vettore Infiammatorio (Continuo, Riposo, Rigidità Mattutina)</label>
+            <select id="input-zone-infiammatorio">
+              <option value="0">0 - Assente</option>
+              <option value="2">1-2 (Lieve/Moderato): rigidità mattutina che si risolve in pochi minuti</option>
+              <option value="4">3-4 (Severo): dolore sordo costante, tumefazione, risvegli notturni</option>
+              <option value="5">5 (Estremo): dolore parossistico incoercibile 24h/24 indifferente al carico</option>
+            </select>
+          </div>
+          <div class="form-group"><label>DN4 Parziale d'Area (0-4)</label><input type="number" id="input-zone-dn4" min="0" max="4" value="0"></div>
+          <div class="form-group"><label>Scala VAS d'Area (0-10)</label><input type="number" id="input-zone-vas" min="0" max="10" value="0"></div>
+          <div style="display:flex; gap:10px;">
+            <button class="btn" style="flex:1;" onclick="salvaDatiDistrettoAlgico()">Salva</button>
+            <button class="btn" style="background:var(--danger); color:white;" onclick="cancellaDatiDistrettoAlgico()">Elimina</button>
+          </div>
+        </div>
+      </div>
+      <table style="width:100%; margin-top:20px; border-collapse: collapse; text-align: left;">
+        <thead>
+          <tr style="border-bottom: 2px solid #334155; color: var(--accent);">
+            <th style="padding: 10px;">Distretto Corporeo Mappato</th>
+            <th>Meccanico</th>
+            <th>Infiammatorio</th>
+            <th>DN4 Area</th>
+            <th>VAS Area</th>
+          </tr>
+        </thead>
+        <tbody id="tbody-mappa"></tbody>
+      </table>
+    </div>
+    <div class="card">
+      <h2>Farmacoterapia in Uso e Riesame (Riconciliazione)</h2>
+      <div class="farmaco-finestre-container">
+        <div class="finestra-farmaco-box">
+          <label>Codeina</label>
+          <select id="f-codeina" onchange="aggiungiFarmacoLista('f-codeina')">
+            <option value="">-- Assunzione? --</option>
+            <option value="CODEINA">Sì, Codeina in uso</option>
+          </select>
+        </div>
+        <div class="finestra-farmaco-box">
+          <label>Tramadolo</label>
+          <select id="f-tramadolo" onchange="aggiungiFarmacoLista('f-tramadolo')">
+            <option value="">-- Assunzione? --</option>
+            <option value="TRAMADOLO">Sì, Tramadolo in uso</option>
+          </select>
+        </div>
+        <div class="finestra-farmaco-box">
+          <label>Tapentadolo</label>
+          <select id="f-tapentadolo" onchange="aggiungiFarmacoLista('f-tapentadolo')">
+            <option value="">-- Assunzione? --</option>
+            <option value="TAPENTADOLO">Sì, Tapentadolo in uso</option>
+          </select>
+        </div>
+        <div class="finestra-farmaco-box">
+          <label>Ossicodone</label>
+          <select id="f-ossicodone" onchange="aggiungiFarmacoLista('f-ossicodone')">
+            <option value="">-- Assunzione? --</option>
+            <option value="OSSICODONE">Sì, Ossicodone in uso</option>
+          </select>
+        </div>
+        <div class="finestra-farmaco-box">
+          <label>Buprenorfina</label>
+          <select id="f-buprenorfina" onchange="aggiungiFarmacoLista('f-buprenorfina')">
+            <option value="">-- Assunzione? --</option>
+            <option value="BUPRENORFINA">Sì, Buprenorfina in uso</option>
+          </select>
+        </div>
+        <div class="finestra-farmaco-box">
+          <label>Fentanyl</label>
+          <select id="f-fentanyl" onchange="aggiungiFarmacoLista('f-fentanyl')">
+            <option value="">-- Assunzione? --</option>
+            <option value="FENTANYL">Sì, Fentanyl in uso</option>
+          </select>
+        </div>
+        <div class="finestra-farmaco-box">
+          <label>Morfina</label>
+          <select id="f-morfina" onchange="aggiungiFarmacoLista('f-morfina')">
+            <option value="">-- Assunzione? --</option>
+            <option value="MORFINA">Sì, Morfina in uso</option>
+          </select>
+        </div>
+        <div class="finestra-farmaco-box">
+          <label>Idromorfone</label>
+          <select id="f-idromorfone" onchange="aggiungiFarmacoLista('f-idromorfone')">
+            <option value="">-- Assunzione? --</option>
+            <option value="IDROMORFONE">Sì, Idromorfone in uso</option>
+          </select>
+        </div>
+        <div class="finestra-farmaco-box">
+          <label>Triptani antiemicranici</label>
+          <select id="f-triptani" onchange="aggiungiFarmacoLista('f-triptani')">
+            <option value="">-- Seleziona --</option>
+            <option value="TRIPTANI">TRIPTANI (Sumatriptan / Zolmitriptan / ecc.)</option>
+          </select>
+        </div>
+        <div class="finestra-farmaco-box">
+          <label>Analgesici non oppioidi & Miorilassanti</label>
+          <select id="f-analgesici" onchange="aggiungiBadgeClinico('f-analgesici', 'box-farmaci-scelti')">
+            <option value="">-- Seleziona --</option>
+            <option value="PARACETAMOLO">PARACETAMOLO</option>
+            <option value="KETOROLAC">KETOROLAC</option>
+            <option value="CICLOBENZAPRINA">CICLOBENZAPRINA</option>
+            <option value="TIZANIDINA">TIZANIDINA</option>
+            <option value="ANTISTAMINICO">ANTISTAMINICO (Prima generazione / Anticolinergico)</option>
+          </select>
+        </div>
+        <div class="finestra-farmaco-box">
+          <label>FANS & Coxib</label>
+          <select id="f-fans" onchange="aggiungiFarmacoLista('f-fans')">
+            <option value="">-- Seleziona --</option>
+            <option value="IBUPROFENE">IBUPROFENE</option>
+            <option value="DICLOFENAC">DICLOFENAC</option>
+            <option value="NAPROSSENE">NAPROSSENE</option>
+            <option value="ACECLOFENAC">ACECLOFENAC</option>
+            <option value="INDOMETACINA">INDOMETACINA</option>
+            <option value="KETOPROFENE">KETOPROFENE</option>
+            <option value="CELECOXIB">CELECOXIB</option>
+            <option value="ETORICOXIB">ETORICOXIB</option>
+          </select>
+        </div>
+        <div class="finestra-farmaco-box">
+          <label>Sistema Genitourinario</label>
+          <select id="f-genitourinario" onchange="aggiungiFarmacoLista('f-genitourinario')">
+            <option value="">-- Seleziona --</option>
+            <option value="TERAZOSINA">TERAZOSINA</option>
+            <option value="FINASTERIDE">FINASTERIDE</option>
+            <option value="DUTASTERIDE">DUTASTERIDE</option>
+            <option value="TAMSULOSINA">TAMSULOSINA</option>
+            <option value="SILODOSINA">SILODOSINA</option>
+            <option value="SILDENAFIL">SILDENAFIL</option>
+            <option value="TADALAFIL">TADALAFIL</option>
+          </select>
+        </div>
+        <div class="finestra-farmaco-box">
+          <label>Ipolipemizzanti</label>
+          <select id="f-ipolipemizzanti" onchange="aggiungiFarmacoLista('f-ipolipemizzanti')">
+            <option value="">-- Seleziona --</option>
+            <option value="ATORVASTATINA">ATORVASTATINA</option>
+            <option value="SIMVASTATINA">SIMVASTATINA</option>
+            <option value="ROSUVASTATINA">ROSUVASTATINA</option>
+            <option value="EZETIMIBE">EZETIMIBE</option>
+          </select>
+        </div>
+        <div class="finestra-farmaco-box">
+          <label>Diuretici</label>
+          <select id="f-diuretici" onchange="aggiungiFarmacoLista('f-diuretici')">
+            <option value="">-- Seleziona --</option>
+            <option value="IDROCLOROTIAZIDE">IDROCLOROTIAZIDE</option>
+            <option value="CLORTALIDONE">CLORTALIDONE</option>
+            <option value="FUROSEMIDE">FUROSEMIDE</option>
+            <option value="SPIRONOLATTONE">SPIRONOLATTONE</option>
+          </select>
+        </div>
+        <div class="finestra-farmaco-box">
+          <label>Beta e Alfa Bloccanti</label>
+          <select id="f-bloccanti" onchange="aggiungiFarmacoLista('f-bloccanti')">
+            <option value="">-- Seleziona --</option>
+            <option value="DOXAZOSINA">DOXAZOSINA</option>
+            <option value="METOPROLOLO">METOPROLOLO</option>
+            <option value="ATENOLOLO">ATENOLOLO</option>
+            <option value="BISOPROLOLO">BISOPROLOLO</option>
+            <option value="CARVEDILOLO">CARVEDILOLO</option>
+            <option value="NEBIVOLOLO">NEBIVOLOLO</option>
+          </select>
+        </div>
+        <div class="finestra-farmaco-box">
+          <label>SRAA (ACEi e Sartani)</label>
+          <select id="f-sraa" onchange="aggiungiFarmacoLista('f-sraa')">
+            <option value="">-- Seleziona --</option>
+            <option value="ENALAPRIL">ENALAPRIL</option>
+            <option value="RAMIPRIL">RAMIPRIL</option>
+            <option value="PERINDOPRIL">PERINDOPRIL</option>
+            <option value="LOSARTAN">LOSARTAN</option>
+            <option value="VALSARTAN">VALSARTAN</option>
+            <option value="CANDESARTAN">CANDESARTAN</option>
+            <option value="OLMESARTAN">OLMESARTAN</option>
+          </select>
+        </div>
+        <div class="finestra-farmaco-box">
+          <label>Calcio Antagonisti</label>
+          <select id="f-calcio" onchange="aggiungiFarmacoLista('f-calcio')">
+            <option value="">-- Seleziona --</option>
+            <option value="DILTIAZEM">DILTIAZEM</option>
+            <option value="VERAPAMIL">VERAPAMIL</option>
+            <option value="AMLODIPINA">AMLODIPINA</option>
+            <option value="NIFEDIPINA">NIFEDIPINA</option>
+          </select>
+        </div>
+        <div class="finestra-farmaco-box">
+          <label>Antiaritmici</label>
+          <select id="f-antiaritmici" onchange="aggiungiFarmacoLista('f-antiaritmici')">
+            <option value="">-- Seleziona --</option>
+            <option value="AMIODARONE">AMIODARONE</option>
+            <option value="FLECAINIDE">FLECAINIDE</option>
+            <option value="PROPAFENONE">PROPAFENONE</option>
+          </select>
+        </div>
+        <div class="finestra-farmaco-box">
+          <label>Antiaggreganti Piastrinici</label>
+          <select id="f-antiaggreganti" onchange="aggiungiFarmacoLista('f-antiaggreganti')">
+            <option value="">-- Seleziona --</option>
+            <option value="ASPIRINA">ASPIRINA</option>
+            <option value="CLOPIDOGREL">CLOPIDOGREL</option>
+            <option value="TICAGRELOR">TICAGRELOR</option>
+          </select>
+        </div>
+        <div class="finestra-farmaco-box">
+          <label>Anticoagulanti (NAO/DOAC)</label>
+          <select id="f-anticoagulanti" onchange="aggiungiFarmacoLista('f-anticoagulanti')">
+            <option value="">-- Seleziona --</option>
+            <option value="WARFARIN">WARFARIN</option>
+            <option value="DABIGATRAN">DABIGATRAN</option>
+            <option value="RIVAROXABAN">RIVAROXABAN</option>
+            <option value="APIXABAN">APIXABAN</option>
+            <option value="EDOXABAN">EDOXABAN</option>
+            <option value="ENOXAPARINA">ENOXAPARINA</option>
+          </select>
+        </div>
+        <div class="finestra-farmaco-box">
+          <label>Ipoglicemizzanti (Antidiabetici)</label>
+          <select id="f-ipoglicemizzanti-select" onchange="aggiungiFarmacoLista('f-ipoglicemizzanti-select')">
+            <option value="">-- Seleziona --</option>
+            <option value="METFORMINA">METFORMINA</option>
+            <option value="GLICLAZIDE">GLICLAZIDE</option>
+            <option value="SITAGLIPTIN">SITAGLIPTIN</option>
+            <option value="SEMAGLUTIDE">SEMAGLUTIDE</option>
+            <option value="EMPAGLIFLOZIN">EMPAGLIFLOZIN</option>
+          </select>
+        </div>
+        <div class="finestra-farmaco-box">
+          <label>Neurologia & Psichiatria (Antidepressivi Centrali)</label>
+          <select id="f-snc" onchange="aggiungiFarmacoLista('f-snc')">
+            <option value="">-- Seleziona --</option>
+            <option value="AMITRIPTILINA">AMITRIPTILINA (TCA)</option>
+            <option value="DULOXETINA">DULOXETINA (SNRI)</option>
+            <option value="VENLAFAXINA">VENLAFAXINA (SNRI)</option>
+            <option value="DESVENLAFAXINA">DESVENLAFAXINA (SNRI)</option>
+            <option value="MILNACIPRAN">MILNACIPRAN (SNRI)</option>
+            <option value="LEVOMILNACIPRAN">LEVOMILNACIPRAN (SNRI)</option>
+            <option value="FLUOXETINA">FLUOXETINA (SSRI)</option>
+            <option value="SERTRALINA">SERTRALINA (SSRI)</option>
+            <option value="PAROXETINA">PAROXETINA (SSRI)</option>
+            <option value="CITALOPRAM">CITALOPRAM (SSRI)</option>
+            <option value="ESCITALOPRAM">ESCITALOPRAM (SSRI)</option>
+            <option value="FLUVOXAMINA">FLUVOXAMINA (SSRI)</option>
+            <option value="PREGABALIN">PREGABALIN</option>
+            <option value="GABAPENTIN">GABAPENTIN</option>
+            <option value="CARBAMAZEPINA">CARBAMAZEPINA</option>
+            <option value="LORAZEPAM">LORAZEPAM</option>
+            <option value="ALPRAZOLAM">ALPRAZOLAM</option>
+            <option value="DIAZEPAM">DIAZEPAM</option>
+          </select>
+        </div>
+        <div class="finestra-farmaco-box">
+          <label>Immunosoppressori & Cortisonici</label>
+          <select id="f-immuno" onchange="aggiungiFarmacoLista('f-immuno')">
+            <option value="">-- Seleziona --</option>
+            <option value="PREDNISONE">PREDNISONE</option>
+            <option value="METILPREDNISOLONE">METILPREDNISOLONE</option>
+            <option value="METOTREXATO">METOTREXATO</option>
+          </select>
+        </div>
+        <div class="finestra-farmaco-box">
+          <label>Nutraceutici & Integratori</label>
+          <select id="f-nutra" onchange="aggiungiFarmacoLista('f-nutra')">
+            <option value="">-- Seleziona --</option>
+            <option value="PALMITOILETANOLAMIDE">PALMITOILETANOLAMIDE (PEA)</option>
+            <option value="ACIDO α-LIPOICO">ACIDO α-LIPOICO</option>
+            <option value="COMPLESSO MULTIVITAMINICO B">COMPLESSO MULTIVITAMINICO B</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group" style="margin-top: 15px;">
+        <label>Farmaci Attualmente Assunti dal Paziente (Riconciliati):</label>
+        <div id="box-farmaci-scelti" class="box-badges" style="background:#131d31;"></div>
+      </div>
+      <div id="pannello-interazioni" class="alert-panel" style="display: none;">
+        <h4 style="color: var(--danger); margin: 0 0 10px 0;">🚨 Alert Farmacologici Rilevati dal Sistema (Intersezioni Cliniche):</h4>
+        <div id="contenitore-critici"></div>
+        <div id="contenitore-avvisi"></div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>7. Questionari Clinici di Validazione Quantitative</h2>
+      <div style="margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid #334155;">
+        <h3 style="color: var(--warning);">Scala DN4 Completa (Dolore Neuropatico)</h3>
+        <div id="dn4-questions-container"></div>
+        <div id="score-dn4-totale" class="score-box">Punteggio DN4 Totale: 0 / 10</div>
+      </div>
+      <div style="margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid #334155;">
+        <h3 style="color: var(--warning);">Central Sensitization Inventory (CSI) Completo (25 Item)</h3>
+        <div id="csi-questions-container" style="max-height: 500px; overflow-y: auto; padding-right: 10px;"></div>
+        <div id="score-csi-totale" class="score-box">Punteggio CSI Totale: 0 / 100</div>
+      </div>
+      <div style="margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid #334155;">
+        <h3 style="color: var(--accent);">Zung Self-Rating Anxiety Scale (SAS) - Screening Ansia</h3>
+        <div id="zung-ansia-container"></div>
+        <div id="score-zung-ansia-totale" class="score-box">Punteggio Zung SAS Grezzo: 5 / 20</div>
+      </div>
+      <div style="margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid #334155;">
+        <h3 style="color: var(--accent);">Zung Self-Rating Depression Scale (SDS) - Screening Depressione</h3>
+        <div id="zung-depressione-container"></div>
+        <div id="score-zung-depressione-totale" class="score-box">Punteggio Zung SDS Grezzo: 11 / 20</div>
+      </div>
+    </div>
+    <div style="text-align: center; margin-bottom: 40px; display: flex; justify-content: center; gap: 20px;">
+      <button class="btn" style="background: var(--success);" onclick="valutaMotoreCDSS()">Esegui Elaborazione Report CDSS</button>
+      <button class="btn" style="background: var(--warning); color: #000;" onclick="window.print()">Esporta PDF Clinico</button>
+    </div>
+    <div class="card" style="background: #131d31; border-color: var(--accent);">
+      <h3>Matrice di Orientamento Diagnostico e Farmacoterapeutico Automatizzato</h3>
+      <div id="output-clinico-testuale" style="min-height: 100px; line-height: 1.6; font-size: 1.05rem;">
+        Inserire la mappatura, i questionari e premere il tasto di elaborazione soprastante.
+      </div>
+    </div>
+  </div>
+  <script>
+    let mappaDoloreDati = {};
+    let farmaciSelezionati = [];
+    let distrettoCorrenteId = null;
+    let scoreDN4Dati = {
+      dn1: 0,
+      dn2: 0,
+      dn3: 0,
+      dn4: 0,
+      dn5: 0,
+      dn6: 0,
+      dn7: 0,
+      dn8: 0,
+      dn9: 0,
+      dn10: 0
+    };
+    let scoreCSIDati = {};
+    for (let i = 1; i <= 25; i++) {
+      scoreCSIDati[`cs${i}`] = 0;
+    }
+    let scoreZungAnsiaDati = {
+      za1: 1,
+      za2: 1,
+      za3: 1,
+      za4: 1,
+      za5: 1
+    };
+    let scoreZungDepxDati = {
+      zd1: 1,
+      zd2: 4,
+      zd3: 1,
+      zd4: 1,
+      zd5: 4
+    };
+    let statoGirovitaRischio = "Normale";
+    window.onload = function() {
+      renderDN4();
+      renderCSI();
+      renderZungAnsia();
+      renderZungDepressione();
+      eseguiCalcoliAnagrafici();
+    };
+
+    function renderDN4() {
+      const container = document.getElementById('dn4-questions-container');
+      const q = [
+        "Il dolore presenta caratteristiche di bruciore?",
+        "Il dolore presenta caratteristiche di freddo doloroso?",
+        "Il dolore presenta caratteristiche di scosse elettriche?",
+        "Il dolore è associato a formicolio nella stessa area?",
+        "Il dolore è associato a sensazione di punture di spilli?",
+        "Il dolore è associato a intorpidimento (ipoestesia)?",
+        "Il dolore è associato a prurito?",
+        "L'esame clinico evidenzia ipoestesia al tatto?",
+        "L'esame clinico evidenzia ipoestesia alla puntura di spillo?",
+        "Il dolore è provocato o aumentato dallo sfregamento leggero (allodinia)?"
+      ];
+      container.innerHTML = q.map((testo, idx) => `
+        <div class="questionario-row">
+          <span><b>DN4-${idx+1}:</b> ${testo}</span>
+          <select onchange="calcolaDN4Completa('dn${idx+1}', this.value)">
+            <option value="0">No</option>
+            <option value="1">Sì</option>
+          </select>
+        </div>
+      `).join('');
+    }
+
+    function renderCSI() {
+      const container = document.getElementById('csi-questions-container');
+      const items = [
+        "Non ho un sonno ristoratore", "I miei muscoli si sentono rigidi e contratti", "Sento dolori in tutto il corpo",
+        "Ho mal di headache", "Sento un peso/tensione alle spalle e al collo", "Ho problemi di stomaco o intestino (gas, crampi, ecc.)",
+        "Ho attacchi di diarrea o stitichezza", "Ho difficoltà a concentrarmi", "Ho la sensazione che la pelle sia troppo sensibile al tatto",
+        "Odori forti mi fanno sentire male o mi danno mal di testa", "Luci intense mi danno fastidio o mi stancano gli occhi",
+        "I rumori forti mi causano fastidio o mal di testa", "Mi sento stanco/privo di forze anche senza aver fatto sforzi",
+        "Il benché minimo sforzo fisico mi fa peggiorare il dolore", "Ho formicolii o intorpidimenti negli arti",
+        "Ho capogiri o mi sento mancare", "Ho difficoltà a ricordare le cose", "Sento tensione o dolore alla mascella/articolazione temporo-mandibolare",
+        "Sono molto sensibile ai cambiamenti di temperatura", "Sento il bisogno urgente di urinare spesso",
+        "Ho una sensazione di ansia o panico", "Mi sento triste, depresso o giù di morale", "Ho dolore o tensione pelvica/genitale",
+        "Ho una diagnosi pregressa di fibromialgia o stanchezza cronica", "Il dolore interferisce gravemente con le mie attività quotidiane"
+      ];
+      container.innerHTML = items.map((testo, idx) => `
+        <div class="questionario-row">
+          <span><b>CSI-${idx+1}:</b> ${testo}</span>
+          <select onchange="calcolaCSI('cs${idx+1}', this.value)">
+            <option value="0">Mai (0)</option>
+            <option value="1">Raramente (1)</option>
+            <option value="2">A volte (2)</option>
+            <option value="3">Spesso (3)</option>
+            <option value="4">Sempre (4)</option>
+          </select>
+        </div>
+      `).join('');
+    }
+
+    function renderZungAnsia() {
+      const container = document.getElementById('zung-ansia-container');
+      const q = [
+        "Mi sento più nervoso e ansioso del solito:",
+        "Mi sento impaurito senza una buona ragione:",
+        "Mi arrabbio facilmente o provo sensazioni di panico:",
+        "Sento che sto per cedere o impazzire:",
+        "Sento che tutto va male e che succederà qualcosa di brutto:"
+      ];
+      container.innerHTML = q.map((testo, idx) => `
+        <div class="questionario-row">
+          <span>${idx+1}. ${testo}</span>
+          <select onchange="calcolaZungAnsia('za${idx+1}', this.value)">
+            <option value="1">Raramente (1)</option>
+            <option value="2">Talvolta (2)</option>
+            <option value="3">Spesso (3)</option>
+            <option value="4">Quasi sempre (4)</option>
+          </select>
+        </div>
+      `).join('');
+    }
+
+    function renderZungDepressione() {
+      const container = document.getElementById('zung-depressione-container');
+      const q = [{
+          id: 'zd1',
+          t: "Mi sento giù di corda, malinconico o depresso:",
+          inv: false
+        },
+        {
+          id: 'zd2',
+          t: "La mattina è il momento in cui mi sento meglio (Invertito):",
+          inv: true
+        },
+        {
+          id: 'zd3',
+          t: "Ho crisi di pianto o sento che sto per piangere:",
+          inv: false
+        },
+        {
+          id: 'zd4',
+          t: "Ho difficoltà a prendre sonno o a dormire la notte:",
+          inv: false
+        },
+        {
+          id: 'zd5',
+          t: "Trovo ancora piacere nel fare le cose che facevo di solito (Invertito):",
+          inv: true
+        }
+      ];
+      container.innerHTML = q.map((item) => `
+        <div class="questionario-row">
+          <span>${item.t}</span>
+          <select onchange="calcolaZungDepressione('${item.id}', this.value)">
+            ${item.inv ? `
+              <option value="4">Raramente (4)</option>
+              <option value="3">Talvolta (3)</option>
+              <option value="2">Spesso (2)</option>
+              <option value="1">Quasi sempre (1)</option>
+            ` : `
+              <option value="1">Raramente (1)</option>
+              <option value="2">Talvolta (2)</option>
+              <option value="3">Spesso (3)</option>
+              <option value="4">Quasi sempre (4)</option>
+            `}
+          </select>
+        </div>
+      `).join('');
+    }
+
+    function calcolaDN4Completa(key, val) {
+      scoreDN4Dati[key] = parseInt(val);
+      let tot = Object.values(scoreDN4Dati).reduce((a, b) => a + b, 0);
+      document.getElementById('score-dn4-totale').innerText = `Punteggio DN4 Totale: ${tot} / 10`;
+      valutaMotoreCDSS();
+    }
+
+    function calcolaCSI(key, val) {
+      scoreCSIDati[key] = parseInt(val);
+      let tot = Object.values(scoreCSIDati).reduce((a, b) => a + b, 0);
+      document.getElementById('score-csi-totale').innerText = `Punteggio CSI Totale: ${tot} / 100`;
+      valutaMotoreCDSS();
+    }
+
+    function calcolaZungAnsia(key, val) {
+      scoreZungAnsiaDati[key] = parseInt(val);
+      let tot = Object.values(scoreZungAnsiaDati).reduce((a, b) => a + b, 0);
+      document.getElementById('score-zung-ansia-totale').innerText = `Punteggio Zung SAS Grezzo: ${tot} / 20`;
+      valutaMotoreCDSS();
+    }
+
+    function calcolaZungDepressione(key, val) {
+      scoreZungDepxDati[key] = parseInt(val);
+      let tot = Object.values(scoreZungDepxDati).reduce((a, b) => a + b, 0);
+      document.getElementById('score-zung-depressione-totale').innerText = `Punteggio Zung SDS Grezzo: ${tot} / 20`;
+      valutaMotoreCDSS();
+    }
+
+    function eseguiCalcoliAnagrafici() {
+      const dataNascitaInput = document.getElementById('dataNascita').value;
+      let eta = 45;
+      if (dataNascitaInput) {
+        const oggi = new Date();
+        const nascita = new Date(dataNascitaInput);
+        eta = oggi.getFullYear() - nascita.getFullYear();
+        const m = oggi.getMonth() - nascita.getMonth();
+        if (m < 0 || (m === 0 && oggi.getDate() < nascita.getDate())) {
+          eta--;
+        }
+        document.getElementById('etaPaziente').value = eta;
+      }
+      const peso = parseFloat(document.getElementById('peso').value) || 0;
+      const altezza = parseFloat(document.getElementById('altezza').value) || 0;
+      if (peso > 0 && altezza > 0) {
+        const bmi = (peso / ((altezza / 100) ** 2)).toFixed(1);
+        let stato = "";
+        if (bmi < 18.5) stato = "Sottopeso";
+        else if (bmi < 25) stato = "Normopeso";
+        else if (bmi < 30) stato = "Sovrappeso";
+        else stato = "Obesità";
+        document.getElementById('bmiOutput').value = `${bmi} (${stato})`;
+      }
+      const sesso = document.getElementById('sesso').value;
+      const girovita = parseFloat(document.getElementById('girovita').value) || 0;
+      let girovitaValutazione = "Non rilevato";
+      if (girovita > 0) {
+        if (sesso === "M") {
+          if (girovita < 94) girovitaValutazione = "Normale";
+          else if (girovita >= 94 && girovita < 102) girovitaValutazione = "Rischio Aumentato";
+          else girovitaValutazione = "Rischio Molto Aumentato";
+        } else {
+          if (girovita < 80) girovitaValutazione = "Normale";
+          else if (girovita >= 80 && girovita < 88) girovitaValutazione = "Rischio Aumentato";
+          else girovitaValutazione = "Rischio Molto Aumentato";
+        }
+      }
+      statoGirovitaRischio = girovitaValutazione;
+      document.getElementById('girovitaOutput').value = `${girovita} cm (${girovitaValutazione})`;
+      calcolaFiltrazioneGlomerulare();
+    }
+
+    function calcolaFiltrazioneGlomerulare() {
+      const eta = parseInt(document.getElementById('etaPaziente').value) || 45;
+      const peso = parseFloat(document.getElementById('peso').value) || 70;
+      const sesso = document.getElementById('sesso').value;
+      const creatinina = parseFloat(document.getElementById('labCreatinina').value) || 1.0;
+      if (creatinina > 0) {
+        let cg = ((140 - eta) * peso) / (72 * creatinina);
+        if (sesso === "F") cg *= 0.85;
+        document.getElementById('egfrOutput').value = cg.toFixed(1) + " mL/min";
+      }
+      valutaMotoreCDSS();
+    }
+
+    function haComorbilitadiNome(nome) {
+      const badges = document.querySelectorAll('.badge-clinico');
+      let trovato = false;
+      badges.forEach(b => {
+        const val = b.getAttribute('data-val') || b.innerText;
+        if (val && val.toUpperCase().includes(nome.toUpperCase())) {
+          trovato = true;
+        }
+      });
+      return trovato;
+    }
+
+    function aggiungiBadgeClinico(selectId, boxId) {
+      const selectEl = document.getElementById(selectId);
+      const box = document.getElementById(boxId);
+      if (!selectEl || !box || !selectEl.value) return;
+      const valoreSelezionato = selectEl.value;
+      const badgeEsistenti = box.querySelectorAll('.badge-clinico');
+      for (let badge of badgeEsistenti) {
+        if (badge.getAttribute('data-val') === valoreSelezionato) {
+          selectEl.value = "";
+          return;
+        }
+      }
+      const idBadge = "badge-" + selectId + "-" + valoreSelezionato.replace(/\s+/g, '-');
+      const badge = document.createElement('div');
+      badge.className = 'badge-clinico';
+      badge.id = idBadge;
+      badge.setAttribute('data-val', valoreSelezionato);
+      badge.innerHTML = `${valoreSelezionato} <span style="cursor:pointer; font-weight:bold;" onclick="document.getElementById('${idBadge}').remove(); valutaMotoreCDSS();">&times;</span>`;
+      box.appendChild(badge);
+      selectEl.value = "";
+      valutaMotoreCDSS();
+    }
+
+    function attivaDistrettoAlgico(element, nomeDistretto) {
+      document.querySelectorAll('.body-trigger').forEach(el => el.classList.remove('selected'));
+      element.classList.add('selected');
+      distrettoCorrenteId = element.id;
+      document.getElementById('zone-configurator-ui').style.display = 'flex';
+      const titoloZona = document.getElementById('selected-zone-title');
+      if (titoloZona) titoloZona.innerText = `Sede Selezionata: ${nomeDistretto}`;
+      if (mappaDoloreDati[distrettoCorrenteId]) {
+        document.getElementById('input-zone-meccanico').value = mappaDoloreDati[distrettoCorrenteId].meccanico;
+        document.getElementById('input-zone-infiammatorio').value = mappaDoloreDati[distrettoCorrenteId].infiammatorio;
+        document.getElementById('input-zone-dn4').value = mappaDoloreDati[distrettoCorrenteId].dn4;
+        document.getElementById('input-zone-vas').value = mappaDoloreDati[distrettoCorrenteId].vas;
+      } else {
+        document.getElementById('input-zone-meccanico').value = "0";
+        document.getElementById('input-zone-infiammatorio').value = "0";
+        document.getElementById('input-zone-dn4').value = "0";
+        document.getElementById('input-zone-vas').value = "0";
+      }
+    }
+
+    function salvaDatiDistrettoAlgico() {
+      if (!distrettoCorrenteId) return;
+      const elementoManichino = document.getElementById(distrettoCorrenteId);
+      const nomeDistretto = elementoManichino.innerText;
+      mappaDoloreDati[distrettoCorrenteId] = {
+        nome: nomeDistretto,
+        meccanico: parseInt(document.getElementById('input-zone-meccanico').value) || 0,
+        infiammatorio: parseInt(document.getElementById('input-zone-infiammatorio').value) || 0,
+        dn4: parseInt(document.getElementById('input-zone-dn4').value) || 0,
+        vas: parseInt(document.getElementById('input-zone-vas').value) || 0
+      };
+      elementoManichino.classList.remove('selected');
+      elementoManichino.classList.add('active');
+      document.getElementById('zone-configurator-ui').style.display = 'none';
+      aggiornaTabellaMappa();
+      valutaMotoreCDSS();
+    }
+
+    function cancellaDatiDistrettoAlgico() {
+      if (!distrettoCorrenteId) return;
+      const elementoManichino = document.getElementById(distrettoCorrenteId);
+      delete mappaDoloreDati[distrettoCorrenteId];
+      elementoManichino.classList.remove('selected', 'active');
+      document.getElementById('zone-configurator-ui').style.display = 'none';
+      aggiornaTabellaMappa();
+      valutaMotoreCDSS();
+    }
+
+    function aggiornaTabellaMappa() {
+      const tbody = document.getElementById('tbody-mappa');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+      for (let chiave in mappaDoloreDati) {
+        const d = mappaDoloreDati[chiave];
+        const row = document.createElement('tr');
+        row.style.borderBottom = '1px solid #334155';
+        row.innerHTML = `
+          <td style="padding: 8px; color:#fff; font-weight:500;">${d.nome}</td>
+          <td style="padding: 8px;">${d.meccanico}</td>
+          <td style="padding: 8px;">${d.infiammatorio}</td>
+          <td style="padding: 8px;">${d.dn4}/4</td>
+          <td style="padding: 8px; color:var(--danger); font-weight:bold;">${d.vas}/10</td>
+        `;
+        tbody.appendChild(row);
+      }
+    }
+
+    function aggiungiFarmacoLista(selectId) {
+      const selectEl = document.getElementById(selectId);
+      if (!selectEl || !selectEl.value) return;
+      const farmaco = selectEl.value;
+      if (!farmaciSelezionati.includes(farmaco)) {
+        farmaciSelezionati.push(farmaco);
+        const box = document.getElementById('box-farmaci-scelti');
+        const badge = document.createElement('div');
+        badge.className = 'badge-clinico';
+        badge.style.background = '#8b5cf6';
+        badge.style.borderColor = '#a78bfa';
+        badge.setAttribute('data-drug', farmaco);
+        badge.innerHTML = `${farmaco} <span onclick="rimuoviFarmacoLista('${farmaco}')">&times;</span>`;
+        box.appendChild(badge);
+      }
+      selectEl.value = "";
+      valutaMotoreCDSS();
+    }
+
+    function rimuoviFarmacoLista(farmaco) {
+      farmaciSelezionati = farmaciSelezionati.filter(f => f !== farmaco);
+      const badge = document.querySelector(`[data-drug="${farmaco}"]`);
+      if (badge) badge.remove();
+      valutaMotoreCDSS();
+    }
+
+    function valutaMotoreCDSS() {
+      try {
+        const pannello = document.getElementById('pannello-interazioni');
+        const boxCritici = document.getElementById('contenitore-critici');
+        const boxAvvisi = document.getElementById('contenitore-avvisi');
+        boxCritici.innerHTML = "";
+        boxAvvisi.innerHTML = "";
+        const valoreEGFR = parseFloat(document.getElementById('egfrOutput').value) || 0;
+        const haAmitriptilina = farmaciSelezionati.includes("AMITRIPTILINA");
+        const ssriLista = ["FLUOXETINA", "SERTRALINA", "PAROXETINA", "CITALOPRAM", "ESCITALOPRAM", "FLUVOXAMINA"];
+        const snriLista = ["DULOXETINA", "VENLAFAXINA", "DESVENLAFAXINA", "MILNACIPRAN", "LEVOMILNACIPRAN"];
+        const farmaciSSRIInUso = farmaciSelezionati.filter(f => ssriLista.includes(f));
+        const farmaciSNRIInUso = farmaciSelezionati.filter(f => snriLista.includes(f));
+        const haSSRI = farmaciSSRIInUso.length > 0;
+        const haSNRI = farmaciSNRIInUso.length > 0;
+        const haTriptani = farmaciSelezionati.includes("TRIPTANI");
+        const haAmiodarone = farmaciSelezionati.includes("AMIODARONE");
+        const haMetformina = farmaciSelezionati.includes("METFORMINA");
+        const haTramadolo = farmaciSelezionati.includes("TRAMADOLO");
+        const haCodeina = farmaciSelezionati.includes("CODEINA");
+        const fansInUso = farmaciSelezionati.filter(f => ["IBUPROFENE", "DICLOFENAC", "NAPROSSENE", "ACECLOFENAC", "INDOMETACINA", "KETOPROFENE", "CELECOXIB", "ETORICOXIB"].includes(f));
+        const haFans = fansInUso.length > 0;
+        const haCodeinaO = farmaciSelezionati.includes("CODEINA");
+        const haTramadoloO = farmaciSelezionati.includes("TRAMADOLO");
+        const haTapentadolo = farmaciSelezionati.includes("TAPENTADOLO");
+        const haOssicodone = farmaciSelezionati.includes("OSSICODONE");
+        const haBuprenorfina = farmaciSelezionati.includes("BUPRENORFINA");
+        const haFentanyl = farmaciSelezionati.includes("FENTANYL");
+        const haMorfina = farmaciSelezionati.includes("MORFINA");
+        const haIdromorfone = farmaciSelezionati.includes("IDROMORFONE");
+        const haOppioidi = haCodeinaO || haTramadoloO || haTapentadolo || haOssicodone || haBuprenorfina || haFentanyl || haMorfina || haIdromorfone;
+        const hasIPB = haComorbilitadiNome("Iperplasia Prostatica Benigna");
+        const hasFibrosiPolmonare = haComorbilitadiNome("Fibrosi Polmonare");
+        let alertCriticiHtml = "";
+        let alertAvvisiHtml = "";
+        const contaSerotoninergici = [haSSRI, haSNRI, haAmitriptilina, haTramadolo, haTriptani].filter(Boolean).length;
+        if (contaSerotoninergici >= 2) {
+          let dettagliati = [...farmaciSSRIInUso, ...farmaciSNRIInUso];
+          if (haAmitriptilina) dettagliati.push("Amitriptilina");
+          if (haTramadolo) dettagliati.push("Tramadolo");
+          if (haTriptani) dettagliati.push("Triptani");
+          alertCriticiHtml += `
+            <div class="alert-danger" style="background: #2d1616; border-left: 5px solid var(--danger); color: #fca5a5; padding: 15px; border-radius: 6px; margin-bottom: 15px;">
+              <b>🔴 CRITICITÀ ASSOLUTA: ELEVATO RISCHIO DI SINDROME SEROTONINERGICA ACUTA</b><br>
+              Associazione concomitante di più agenti che incrementano i livelli sinaptici di serotonina. Rilevati in terapia: <b>${dettagliati.join(', ')}</b>.<br>
+              <i>Pericolo di iperstimolazione recettoriale 5-HT: rischio di alterazioni dello stato mentale, instabilità autonomica e disturbi neuromuscolari.</i>
+            </div>`;
+        }
+        if ((haSSRI || haSNRI) && haFans) {
+          alertAvvisiHtml += `
+            <div class="alert-warning" style="background: #2e2516; border-left: 5px solid var(--warning); color: #fef08a; padding: 15px; border-radius: 6px; margin-bottom: 15px;">
+              <b>🟡 INTERAZIONE FARMACOLOGICA (AUMENTO RISCHIO EMORRAGICO GASTROINTESTINALE):</b><br>
+              L'uso concomitante di farmaci antidepressivi (SSRI o SNRI) e FANS/Coxib altera l'emostasi primaria a causa dell'inibizione della ricaptazione della serotonina piastrinica sinergica all'inibizione della COX-1. Valutare attentamente l'inserimento di una protezione gastrica (PPI).
+            </div>`;
+        }
+        if (haAmitriptilina && hasIPB) {
+          alertCriticiHtml += `
+            <div class="alert-danger" style="background: #2d1616; border-left: 5px solid var(--danger); color: #fca5a5; padding: 15px; border-radius: 6px; margin-bottom: 15px;">
+              <b>🔴 CONTROINDICAZIONE ASSOLUTA (AMITRIPTILINA + IPB):</b><br>
+              L'attività anticolinergica intrinseca dell'Amitriptilina inibisce il detrusore vescicale, potendo indurre <b>Ritenzione Urinaria Acuta (RUA)</b> severa in pazienti con Iperplasia Prostatica Benigna.
+            </div>`;
+        }
+        if (haOppioidi && hasFibrosiPolmonare) {
+          alertCriticiHtml += `
+            <div class="alert-danger" style="background: #2d1616; border-left: 5px solid var(--danger); color: #fca5a5; padding: 15px; border-radius: 6px; margin-bottom: 15px;">
+              <b>🔴 CONTROINDICAZIONE ASSOLUTA (OPPIOIDI + FIBROSI POLMONARE):</b><br>
+              Gli oppioidi deprimono il drive respiratorio centrale; controindicati in quadri di fibrosi parenchimale polmonare restrittiva per rischio di insufficienza respiratoria acuta ipercapnica.
+            </div>`;
+        }
+        if (haAmiodarone && (haAmitriptilina || farmaciSSRIInUso.includes("CITALOPRAM") || farmaciSSRIInUso.includes("ESCITALOPRAM") || farmaciSSRIInUso.includes("FLUOXETINA"))) {
+          alertCriticiHtml += `
+            <div class="alert-danger" style="background: #2d1616; border-left: 5px solid var(--danger); color: #fca5a5; padding: 15px; border-radius: 6px; margin-bottom: 15px;">
+              <b>🔴 INTERAZIONE GRAVE (PROLUNGAMENTO INTERVALLO QT):</b><br>
+              Associazione ad alto rischio aritmogeno tra Amiodarone e antidepressivo (Amitriptilina, Citalopram, Escitalopram o Fluoxetina). Rischio cumulativo di prolungamento del tratto QT.
+            </div>`;
+        }
+        if (haMetformina && valoreEGFR < 30) {
+          alertCriticiHtml += `
+            <div class="alert-danger" style="background: #2d1616; border-left: 5px solid var(--danger); color: #fca5a5; padding: 15px; border-radius: 6px; margin-bottom: 15px;">
+              <b>🔴 CONTROINDICAZIONE ASSOLUTA (METFORMINA CON eGFR &lt; 30):</b><br>
+              Metformina tassativamente controindicata per eGFR inferiore a 30 mL/min a causa del potenziale accumulo sistemico e rischio correlato di acidosi lattica.
+            </div>`;
+        }
+        if ((farmaciSSRIInUso.includes("FLUOXETINA") || farmaciSSRIInUso.includes("PAROXETINA") || farmaciSNRIInUso.includes("DULOXETINA")) && (haTramadolo || haCodeina)) {
+          alertAvvisiHtml += `
+            <div class="alert-warning" style="background: #2e2516; border-left: 5px solid var(--warning); color: #fef08a; padding: 15px; border-radius: 6px; margin-bottom: 15px;">
+              <b>🟡 INTERAZIONE CON RISCHIO DI FALLIMENTO ANALGESICO (INIBIZIONE CYP2D6):</b><br>
+              Fluoxetina, Paroxetina o Duloxetina inibiscono fortemente il citocromo CYP2D6, impedendo la conversione metabolica di Tramadolo o Codeina nei rispettivi metaboliti attivi dotati di reale affinità mu-oppioide. L'effetto analgesico risulterà drasticamente annullato.
+            </div>`;
+        }
+        if (alertCriticiHtml !== "" || alertAvvisiHtml !== "") {
+          pannello.style.display = "block";
+          boxCritici.innerHTML = alertCriticiHtml;
+          boxAvvisi.innerHTML = alertAvvisiHtml;
+        } else {
+          pannello.style.display = "none";
+        }
+        eseguiCalcoloReportCDSS(haSSRI, haSNRI, farmaciSSRIInUso, farmaciSNRIInUso);
+      } catch (e) {
+        console.error("Errore nel motore CDSS: ", e);
+      }
+    }
+
+    function eseguiCalcoloReportCDSS(haSSRI, haSNRI, farmaciSSRIInUso, farmaciSNRIInUso) {
+      const output = document.getElementById('output-clinico-testuale');
+      if (!output) return;
+      const eGFRVal = parseFloat(document.getElementById('egfrOutput').value) || 0;
+      const etaPaziente = parseInt(document.getElementById('etaPaziente').value) || 0;
+      let totDN4 = Object.values(scoreDN4Dati).reduce((a, b) => a + b, 0);
+      let totCSI = Object.values(scoreCSIDati).reduce((a, b) => a + b, 0);
+      let totAnsia = Object.values(scoreZungAnsiaDati).reduce((a, b) => a + b, 0);
+      let totDepr = Object.values(scoreZungDepxDati).reduce((a, b) => a + b, 0);
+      let numAree = Object.keys(mappaDoloreDati).length;
+      let vasMax = 0;
+      let maxMeccanico = 0;
+      let maxInfiammatorio = 0;
+      let durataDoloreCronico = (document.getElementById('durata-dolore').value === "cronico");
+      for (let chiave in mappaDoloreDati) {
+        const dist = mappaDoloreDati[chiave];
+        if (dist.vas > vasMax) vasMax = dist.vas;
+        if (dist.meccanico > maxMeccanico) maxMeccanico = dist.meccanico;
+        if (dist.infiammatorio > maxInfiammatorio) maxInfiammatorio = dist.infiammatorio;
+      }
+      const hasIPB = haComorbilitadiNome("Iperplasia Prostatica Benigna");
+      const hasCardiopatia = haComorbilitadiNome("Cardiopatia Ischemica") || haComorbilitadiNome("Scompenso Cardiaco");
+      const hasFibrosiPolmonare = haComorbilitadiNome("Fibrosi Polmonare");
+      const hasBPCO = haComorbilitadiNome("Asma Bronchiale") || haComorbilitadiNome("BPCO");
+      const isTrigeminale = mappaDoloreDati["t-trigemino"] || haComorbilitadiNome("Nevralgia del Trigemino");
+      const haAmiodaroneInUso = farmaciSelezionati.includes("AMIODARONE");
+      const haTramadoloInUso = farmaciSelezionati.includes("TRAMADOLO");
+      const haTriptaniInUso = farmaciSelezionati.includes("TRIPTANI");
+      const isNeuropatico = (totDN4 >= 4);
+      const isNociplastico = (totCSI >= 40 || numAree >= 3);
+      const isInfiammatorio = (maxInfiammatorio >= 3);
+      let farmacoScelto = "";
+      let categoriaFarmaco = "";
+      let motivazioneClinica = "";
+      let noteCautela = "";
+
+      function selezionaAntidepressivoCentraleSicuro() {
+        if (haSSRI || haSNRI || haTramadoloInUso) {
+          return {
+            nome: "<b>Pregabalin / Gabapentin in monoterapia</b> (aggiustato per eGFR)",
+            alert: "⚠️ <i>Nota di sicurezza: Evitato l'inserimento di Amitriptilina/Duloxetina perché il paziente ha già in corso un farmaco ad attività serotoninergica (" + [...farmaciSSRIInUso, ...farmaciSNRIInUso, haTramadoloInUso ? 'Tramadolo' : ''].filter(Boolean).join(', ') + "). L'aggiunta avrebbe causato un rischio critico di Sindrome Serotoninergica.</i>"
+          };
+        }
+        let amitriptilinaAmmissibile = true;
+        let motiviNoAmitriptilina = [];
+        if (hasIPB) {
+          amitriptilinaAmmissibile = false;
+          motiviNoAmitriptilina.push("Iperplasia Prostatica Benigna (rischio di ritenzione urinaria acuta)");
+        }
+        if (hasCardiopatia) {
+          amitriptilinaAmmissibile = false;
+          motiviNoAmitriptilina.push("Cardiopatia/Scompenso (rischio aritmogeno e blocco di conduzione)");
+        }
+        if (etaPaziente >= 65) {
+          amitriptilinaAmmissibile = false;
+          motiviNoAmitriptilina.push("Età geriatrica &ge; 65 anni (Criteri di Beers per alto carico anticolinergico)");
+        }
+        if (haAmiodaroneInUso) {
+          amitriptilinaAmmissibile = false;
+          motiviNoAmitriptilina.push("Terapia concomitante con Amiodarone (alto rischio di prolungamento del tratto QT)");
+        }
+        if (haTriptaniInUso) {
+          amitriptilinaAmmissibile = false;
+          motiviNoAmitriptilina.push("Uso concomitante di Triptani (rischio potenziamento serotoninergico)");
+        }
+        if (amitriptilinaAmmissibile) {
+          return {
+            nome: "<b>Amitriptilina (TCA)</b> (5-10 gocce serali)",
+            alert: ""
+          };
+        }
+        let duloxetinaAmmissibile = true;
+        let motiviNoDuloxetina = [];
+        if (haAmiodaroneInUso) {
+          duloxetinaAmmissibile = false;
+          motiviNoDuloxetina.push("Uso concomitante di Amiodarone (rischio prolungamento QT)");
+        }
+        if (duloxetinaAmmissibile) {
+          return {
+            nome: "<b>Duloxetina (SNRI)</b> (30-60 mg/die)",
+            alert: `ℹ️ <i>Nota di switch clinico: Scelta Duloxetina al posto di Amitriptilina a causa di controindicazioni sistemiche di quest'ultima (${motiviNoAmitriptilina.join(', ')}).</i>`
+          };
+        }
+        return {
+          nome: "<b>Pregabalin / Gabapentin</b> (Target esclusivo canali idrofili del calcio senza interazioni centrali monoaminergiche)",
+          alert: `⚠️ <i>Alert di restrizione: Esclusi sia TCA che SNRI dalla scelta clinica a causa di incompatibilità farmacologiche multiple con le comorbilità o la terapia in uso del paziente.</i>`
+        };
+      }
+      if (isTrigeminale) {
+        categoriaFarmaco = "Antiepilettico Specifico (Target Nevralgia Trigeminale)";
+        farmacoScelto = "<b>Carbamazepina</b> (Start: 100-200 mg 1-2 volte al giorno).";
+        motivazioneClinica = "Linea terapeutica elettiva di prima scelta automatizzata per riscontro di sintomatologia parossistica o diagnosi di Nevralgia del Trigemino.";
+        noteCautela = "⚠️ <i>Eseguire monitoraggio periodico dell'emocromo completo (rischio leucopenia) e della sodiemia (rischio iponatremia da SIADH).</i>";
+      } else if ((isNeuropatico && isInfiammatorio) || (isNeuropatico && isNociplastico && isInfiammatorio)) {
+        categoriaFarmaco = "DOLORE MISTO (Componente Neuropatica Periferica + Componente Nocicettiva Infiammatoria)";
+        let baseNeuropatica = (eGFRVal < 60) ?
+          "<b>Pregabalin</b> (dosaggio ridotto adattato alla clearance renale, es. 25-50 mg serali)" :
+          "<b>Pregabalin</b> (75 mg 2 volte al giorno) o <b>Gabapentin</b> (300 mg 3 volte al giorno)";
+        let quotaFANS = "";
+        if (eGFRVal >= 60 && !hasCardiopatia) {
+          quotaFANS = " associato a brevi cicli di <b>FANS (es. Naprossene 500 mg x2/die)</b> durante i flare-up";
+          if (haSSRI || haSNRI) {
+            noteCautela += "<br>⚠️ <i>Attenzione: L'associazione della quota FANS indicata con gli antidepressivi SSRI/SNRI in uso al paziente eleva il rischio emorragico gastrico. Prescrivere obbligatoriamente un PPI di copertura.</i>";
+          }
+        } else {
+          quotaFANS = " associato a <b>Paracetamolo 1g</b> ad orari fissi (FANS omessi per rischio d'organo renale/cardiaco)";
+        }
+        let adCentrale = selezionaAntidepressivoCentraleSicuro();
+        let componenteAntidepressiva = (adCentrale.alert.includes("monoterapia") || adCentrale.nome.includes("Pregabalin")) ? "" : " + " + adCentrale.nome;
+        if (adCentrale.alert) noteCautela += "<br>" + adCentrale.alert;
+        farmacoScelto = `${baseNeuropatica}${quotaFANS}${componenteAntidepressiva}.<br>➕ Supporto bio-strutturale neurotrofico integrato: <b>Palmitoiletanolamide (PEA) + Acido α-Lipoico</b>.`;
+        motivazioneClinica = "L'approccio multimodale sul dolore misto combina la down-regulation neuronale con il contenimento dei mediatori flogistici periferici, validato contro il profilo di interazione del paziente.";
+        if (vasMax >= 8 && !hasFibrosiPolmonare) {
+          if (haSSRI || haSNRI || adCentrale.nome.includes("Duloxetina")) {
+            farmacoScelto += "<br>➕ Rescue Therapy: <b>Tapentadolo</b> (50 mg al bisogno), monitorando i segni serotoninergici. (Evitato il tramadolo per inibizione metabolica CYP2D6 e cumulo 5-HT).";
+          } else {
+            farmacoScelto += "<br>➕ Rescue Therapy: <b>Tapentadolo</b> o <b>Ossicodone/Paracetamolo</b> per i picchi algici.";
+          }
+        }
+      } else if (isInfiammatorio && isNociplastico) {
+        categoriaFarmaco = "DOLORE MISTO (Componente Nocicettiva Infiammatoria Cronica + Componente Nociplastica da Sensibilizzazione Centrale)";
+        let adCentrale = selezionaAntidepressivoCentraleSicuro();
+        let lineaModulazione = adCentrale.nome;
+        if (adCentrale.alert) noteCautela += "<br>" + adCentrale.alert;
+        let controlloFlogosi = "";
+        if (eGFRVal >= 60 && !hasCardiopatia) {
+          controlloFlogosi = " + <b>FANS ad ampio spettro al bisogno</b> mirati.";
+          if (haSSRI || haSNRI) {
+            noteCautela += "<br>⚠️ <i>Rischio emorragico cumulativo: il paziente assume già antidepressivi. Se si usano FANS, associare tassativamente protezione gastrica.</i>";
+          }
+        } else {
+          controlloFlogosi = " + <b>Paracetamolo 1g continuativo</b> (FANS interdetti).";
+        }
+        let miorilassante = (!hasBPCO) ? " + <b>Ciclobenzaprina</b> serale" : "";
+        farmacoScelto = `${lineaModulazione}${controlloFlogosi}${miorilassante}.<br>➕ Modulazione delle membrane mastocitarie: <b>Palmitoiletanolamide (PEA)</b>.`;
+        motivazioneClinica = "Strategia combinata indirizzata alla sensibilizzazione centrale e periferica, filtrata per le interazioni farmacologiche in uso.";
+      } else if (isNeuropatico) {
+        if (numAree === 1) {
+          categoriaFarmaco = "Dolore Neuropatico Periferico Focale Circoscritto";
+          farmacoScelto = "<b>Lidocaina cerotto 5%</b> (applicazione locale topica 12h/die) o <b>Capsaicina cerotto 8%</b>.<br>➕ Co-Analgesia: <b>PEA</b>.";
+          motivazioneClinica = "Localizzazione anatomica strettamente circoscritta e superficiale; l'approccio topico azzera il rischio di interazioni sistemiche con la terapia in uso.";
+        } else {
+          categoriaFarmaco = "Dolore Neuropatico Sistemico / Polidistrettuale";
+          let lineaSistemica = (eGFRVal >= 60) ? "<b>Pregabalin</b> (75 mg 2 volte/die) o <b>Gabapentin</b> (300 mg 3 volte/die)" : "<b>Pregabalin / Gabapentin</b> ridotta in base all'eGFR.";
+          let adCentrale = selezionaAntidepressivoCentraleSicuro();
+          if (adCentrale.alert) noteCautela += "<br>" + adCentrale.alert;
+          if (adCentrale.alert.includes("monoterapia") || adCentrale.nome.includes("Pregabalin")) {
+            farmacoScelto = `${lineaSistemica} (Terapia modificata o lasciata inalterata per evitare interazioni centrali).`;
+          } else {
+            farmacoScelto = `${lineaSistemica} in combinazione sinergica con ${adCentrale.nome}.`;
+          }
+          farmacoScelto += "<br>➕ Integrazione neurotrofica: <b>PEA + Complesso Multivitaminico B</b>.";
+          motivazioneClinica = "Necessità di un approccio sistemico combinato, ottimizzato per aggirare i farmaci e le comorbilità preesistenti.";
+          if (vasMax >= 8) {
+            if (!hasFibrosiPolmonare) {
+              farmacoScelto += "<br>➕ Soccorso analgesico integrato: <b>Tapentadolo</b> per via orale al bisogno.";
+            } else {
+              noteCautela += "<br>⚠️ <i>Prescrizione di oppioidi centrali evitata per la presenza concomitante di Fibrosi Polmonare cronica.</i>";
+            }
+          }
+        }
+      } else if (isNociplastico) {
+        categoriaFarmaco = "Dolore Nociplastico (Sensibilizzazione Centrale Dominante)";
+        let miorilassanteScelto = (hasBPCO) ? "" : " + <b>Ciclobenzaprina</b> alla sera";
+        if (hasBPCO) noteCautela += "<br>⚠️ <i>Miorilassanti centrali esclusi a causa della concomitanza di patologia respiratoria ostruttiva cronica (BPCO/Asma).</i>";
+        let adCentrale = selezionaAntidepressivoCentraleSicuro();
+        if (adCentrale.alert) noteCautela += "<br>" + adCentrale.alert;
+        let lineaSensibilizzazione = (eGFRVal < 60) ? "<b>Pregabalin / Gabapentin</b> (Dosaggi minimi adattati alla clearance renale)" : "<b>Pregabalin / Gabapentin</b> a bassi dosaggi di ingresso.";
+        if (adCentrale.alert.includes("monoterapia") || adCentrale.nome.includes("Pregabalin")) {
+          farmacoScelto = `${lineaSensibilizzazione}${miorilassanteScelto}.<br>➕ Stabilizzazione extra-target: <b>PEA</b>.`;
+        } else {
+          farmacoScelto = `${adCentrale.nome} in combinazione graduale con ${lineaSensibilizzazione}${miorilassanteScelto}.<br>➕ Stabilizzazione: <b>PEA</b>.`;
+        }
+        motivazioneClinica = "Rimodulazione dell'iperalgesia diffusa e del processamento algico centrale tramite l'uso sicuro di farmaci centrali non collidenti.";
+      } else if (isInfiammatorio && !durataDoloreCronico) {
+        categoriaFarmaco = "Dolore Nocicettivo Infiammatorio Acuto";
+        if (eGFRVal >= 60 && !hasCardiopatia) {
+          if (vasMax >= 8) {
+            if (!hasFibrosiPolmonare) {
+              farmacoScelto = "Opzioni sistemiche ad alta potenza d'urto: <b>Glucocorticoidi</b> (es. Prednisone a scalare) OPPURE <b>Morfina</b> o <b>Ossicodone</b> a dosaggi minimi d'attacco.";
+            } else {
+              farmacoScelto = "<b>Glucocorticoidi</b> (es. Prednisone o Metilprednisolone) a scalare terapeutico controllato.";
+              noteCautela += "<br>⚠️ <i>Oppioidi maggiori d'urto rimossi dalle opzioni terapeutiche a causa del riscontro anamnestico di Fibrosi Polmonare attiva.</i>";
+            }
+          } else {
+            farmacoScelto = "FANS ad azione rapida a scelta tra: <b>Ibuprofene</b> (400-600 mg) o <b>Naprossene</b> per un ciclo massimo di 5-7 giorni.";
+            if (haSSRI || haSNRI) {
+              noteCautela += "<br>⚠️ <i>Alert Sicurezza: Il paziente assume antidepressivi centrali. Aggiungere PPI per neutralizzare il rischio emorragico indotto dai FANS.</i>";
+            }
+          }
+        } else {
+          if (vasMax >= 8 && !hasFibrosiPolmonare) {
+            farmacoScelto = "FANS e Glucocorticoidi controindicati per insufficienza d'organo. Configurato oppioide forte di sicurezza: <b>Morfina</b> o <b>Idromorfone</b> a dosaggi minimi controllati.";
+          } else {
+            farmacoScelto = "Controindicazione clinica multiorgano all'uso di FANS, Cortisonici e Oppioidi. Somministrare <b>Paracetamolo</b> 1g (fino a unax di 3g/die) come base analgesica pura.";
+          }
+        }
+        motivazioneClinica = "Gestione mirata allo spegnimento della cascata flogistica acuta tissutale.";
+      } else {
+        categoriaFarmaco = "Dolore Nocicettivo Infiammatorio Cronico";
+        let fansCicli = "";
+        if (eGFRVal >= 60 && !hasCardiopatia) {
+          fansCicli = " + <b>FANS a brevi cicli controllati</b> esclusivamente in caso di riacutizzazione sintomatologica";
+          if (haSSRI || haSNRI) {
+            noteCautela += "<br>⚠️ <i>La terapia con FANS a cicli, sovrapposta alla terapia antidepressiva in uso, richiede copertura gastroprotettiva obbligatoria.</i>";
+          }
+        } else {
+          fansCicli = " (Uso di FANS permanentemente escluso per profilo di rischio renale/cardiaco cronico)";
+        }
+        if (vasMax >= 8) {
+          if (!hasFibrosiPolmonare) {
+            farmacoScelto = "Terapia oppioide maggiore strutturata a rilascio prolungato: <b>Ossicodone</b> o <b>Fentanyl (cerotto transdermico)</b>.<br>➕ Terapia base sinergica: <b>Paracetamolo</b> 1g ad orari fissi.";
+          } else {
+            let alternativaFansFlusso = (eGFRVal >= 60 && !hasCardiopatia) ? "<br>➕ In caso di riacutizzazione: <b>FANS a cicli brevissimi (3-5 giorni)</b> con attenta gastroprotezione obbligatoria." : "";
+            farmacoScelto = "<b>Paracetamolo</b> 1g fino a 3 volte al giorno continuativo + Ottimizzazione di infiltrazioni terapeutiche locali." + alternativaFansFlusso;
+            noteCautela += "<br>⚠️ <span style='color:var(--danger); font-weight:bold;'>ALERT DI SICUREZZA: Oppioidi maggiori rimossi dall'algoritmo per riscontro di Fibrosi Polmonare.</span>";
+          }
+        } else {
+          farmacoScelto = `<b>Paracetamolo</b> 1g fino a 3 volte al giorno in somministrazione continuativa${fansCicli}.<br>🏃‍♂️ Consigliata associata: <b>Riabilitazione motoria</b> mirata.`;
+        }
+        motivazioneClinica = "Gestione a lungo termine focalizzata sul massimo profilo di sicurezza d'organo.";
+      }
+      if (totAnsia >= 12 || totDepr >= 13) {
+        noteCautela += "<br>🧠 <i>Nota clinica: Gli score dei questionari Zung indicano una significativa componente di distress emotivo (ansia/depressione) associata. Integrare supporto psicologico cognitivo-comportamentale.</i>";
+      }
+      output.innerHTML = `
+        <div style="border-left: 4px solid var(--accent); padding-left: 15px; margin-bottom: 15px;">
+          <h4 style="color: var(--accent); margin: 0 0 5px 0;">📋 INQUADRAMENTO DIAGNOSTICO AUTOMATICO</h4>
+          Punteggio DN4: <b>${totDN4}/10</b> | CSI Totale: <b>${totCSI}/100</b> | Aree Corporee Mappate: <b>${numAree}</b><br>
+          Picco intensità dolore (VAS Max): <span style="color: var(--danger); font-weight:bold;">${vasMax}/10</span>
+        </div>
+        <div style="background: #1e293b; padding: 15px; border-radius: 6px; border: 1px solid var(--purple); margin-top: 15px;">
+          <h4 style="color: var(--purple); margin: 0 0 5px 0;">⚡ ALGORITMO DI SCELTA TERAPEUTICA AUTOMATICA (FILTRATO PER INTERAZIONI ED ERRORI DI PRESCRIVIBILITÀ)</h4>
+          <small style="color: #38bdf8; text-transform: uppercase; font-weight: bold; letter-spacing: 0.5px;">Meccanismo prevalente: ${categoriaFarmaco}</small>
+          <p style="font-size: 1.15rem; margin: 8px 0 10px 0; color: #fff; line-height: 1.5;">${farmacoScelto}</p>
+          <hr style="border-color: #334155; margin: 10px 0;">
+          <small style="color: var(--text-muted); display: block;"><b>Razionale d'Indirizzo Clinico:</b> ${motivazioneClinica}</small>
+          ${noteCautela ? `<p style="margin: 10px 0 0 0; font-size: 0.9rem; background: #2a2415; padding: 8px; border-radius: 4px; border-left: 3px solid var(--warning);">${noteCautela}</p>` : ''}
+        </div>
+      `;
+    }
+  </script>
+</body>
+
+</html>
+    <script  src="./script.js"></script>
+
+  </body>
+  
+</html>
